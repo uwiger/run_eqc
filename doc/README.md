@@ -28,7 +28,6 @@ it in the Makefile, and call `make script`.
 
 
 <table width="100%" border="0" summary="list of modules">
-<tr><td><a href="eqcmini.md" class="module">eqcmini</a></td></tr>
 <tr><td><a href="run_eqc.md" class="module">run_eqc</a></td></tr>
 <tr><td><a href="run_eqc_app.md" class="module">run_eqc_app</a></td></tr>
 <tr><td><a href="run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr></table>
