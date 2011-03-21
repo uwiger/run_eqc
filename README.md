@@ -49,7 +49,7 @@ Example:
 
 
 
-Using the (broken) property in [run_eqc_test.erl](blob/master/test/run_eqc_test.erl), we can illustrate the use of num_tests (the error is unlikely to appear with only 100 tests), and `-rpt error`. We also note that `run_eqc.escript` signals test case failure appropriately to the make script.
+Using the (broken) property in [run_eqc_test.erl](run_eqc/blob/master/test/run_eqc_test.erl), we can illustrate the use of num_tests (the error is unlikely to appear with only 100 tests), and `-rpt error`. We also note that `run_eqc.escript` signals test case failure appropriately to the make script.
 
 
 <pre>
@@ -97,7 +97,7 @@ OK, passed 100 tests
 
 
 <table width="100%" border="0" summary="list of modules">
-<tr><td><a href="blob/master/doc/run_eqc.md" class="module">run_eqc</a></td></tr>
-<tr><td><a href="blob/master/doc/run_eqc_app.md" class="module">run_eqc_app</a></td></tr>
-<tr><td><a href="blob/master/doc/run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr></table>
+<tr><td><a href="run_eqc/blob/master/doc/run_eqc.md" class="module">run_eqc</a></td></tr>
+<tr><td><a href="run_eqc/blob/master/doc/run_eqc_app.md" class="module">run_eqc_app</a></td></tr>
+<tr><td><a href="run_eqc/blob/master/doc/run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr></table>
 

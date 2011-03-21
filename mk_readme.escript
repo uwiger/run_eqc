@@ -2,6 +2,8 @@
 %% -*- erlang -*-
 
 main([Src, Target]) ->
+    {ok, Cwd} = file:get_cwd(),
+    App = filename:basename(Cwd),
     Branch = get_git_branch(),
     case file:read_file(Src) of
 	{ok, SrcBin} ->
@@ -9,9 +11,11 @@ main([Src, Target]) ->
 		replace(
 		  replace(SrcBin,
 			  <<"](../test/">>,
-			  list_to_binary("](blob/" ++ Branch ++ "/test/")),
+			  list_to_binary(["](", App, "/blob/",
+					  Branch, "/test/"])),
 		  <<"href=\"run_">>,
-		  list_to_binary("href=\"blob/" ++ Branch ++ "/doc/run_")),
+		  list_to_binary(["href=\"", App, "/blob/",
+				  Branch, "/doc/run_"])),
 	    ok = file:write_file(Target, TgtBin)
     end.
 
