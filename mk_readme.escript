@@ -5,15 +5,22 @@ main([Src, Target]) ->
     Branch = get_git_branch(),
     case file:read_file(Src) of
 	{ok, SrcBin} ->
-	    SrcStr = <<"href=\"">>,
-	    NewStr = list_to_binary("href=\"blob/" ++ Branch ++ "/doc/"),
-	    TgtBin = binary:replace(SrcBin,
-				    SrcStr,
-				    NewStr, [global]
-			       ),
+	    TgtBin =
+		replace(
+		  replace(SrcBin,
+			  <<"](../test/">>,
+			  list_to_binary("](blob/" ++ Branch ++ "/test/")),
+		  <<"href=\"run_">>,
+		  list_to_binary("href=\"blob/" ++ Branch ++ "/doc/run_")),
 	    ok = file:write_file(Target, TgtBin)
     end.
 
+replace(SrcBin, SrcStr, NewStr) ->
+    binary:replace(SrcBin,
+		   SrcStr,
+		   NewStr, [global]
+		  ).
+    
 
 get_git_branch() ->
     case os:cmd("git branch | awk '/\\*/ {print $2}'") of

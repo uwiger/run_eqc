@@ -49,7 +49,7 @@ Example:
 
 
 
-Using the (broken) property in [run_eqc_test.erl](../test/run_eqc_test.erl), we can illustrate the use of num_tests (the error is unlikely to appear with only 100 tests), and `-rpt error`. We also note that `run_eqc.escript` signals test case failure appropriately to the make script.
+Using the (broken) property in [run_eqc_test.erl](blob/master/test/run_eqc_test.erl), we can illustrate the use of num_tests (the error is unlikely to appear with only 100 tests), and `-rpt error`. We also note that `run_eqc.escript` signals test case failure appropriately to the make script.
 
 
 <pre>
