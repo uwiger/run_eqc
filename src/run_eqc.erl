@@ -65,7 +65,7 @@ usage(Error) ->
       "  -m Module      run eqc:module([ Option, ] Module)~n"
       "  -pa Dir        prepend Dir to the code path~n"
       "  -pz Dir        append Dir to the code path~n"
-      "  -rpt all       set reporting level - 'all': report everything~n"
+      "  -rpt all       set reporting level - 'all': report everything (default)~n"
       "      | none     'none': (as silent as possible)~n"
       "      | error    'error': report on failing tests.~n",
       [Error, script_name()]),
@@ -145,12 +145,14 @@ module2(Opt, Rpt, Mod) ->
        true ->
 	    ok
     end,
-    lists:filter(fun(P) ->
-			 new_context(P, Rpt),
-			 Passed = eqc:quickcheck(Apply(Mod:P())),
-			 clear_context(Passed, Rpt),
-			 not Passed
-		 end, Props).
+    Res = lists:filter(fun(P) ->
+			       new_context(P, Rpt),
+			       Passed = eqc:quickcheck(Apply(Mod:P())),
+			       clear_context(Passed, Rpt),
+			       not Passed
+		       end, Props),
+    close_reporter(),
+    Res.
 
 is_prop(F) ->
     case atom_to_list(F) of
@@ -160,21 +162,42 @@ is_prop(F) ->
 
 spawn_reporter() ->
     Parent = self(),
-    P = spawn_link(fun() ->
-			   register(run_eqc_reporter, self()),
-			   Parent ! {ok, self()},
-			   reporter_loop(undefined, queue:new())
-		   end),
+    P = spawn(fun() ->
+		      register(run_eqc_reporter, self()),
+		      erlang:monitor(process, Parent),
+		      Parent ! {ok, self()},
+		      reporter_loop(undefined, queue:new())
+	      end),
     receive
 	{ok, P} = Res ->
 	    Res
+    end.
+
+close_reporter() ->
+    case whereis(run_eqc_reporter) of
+	undefined ->
+	    ok;
+	P ->
+	    Ref = erlang:monitor(process, P),
+	    P ! {self(), stop},
+	    receive
+		{P, ok} ->
+		    ok;
+		{'DOWN', Ref, _, _, _} ->
+		    ok
+	    after 10000 ->
+		    exit(P, kill),
+		    ok
+	    end
     end.
 	    
 
 reporter_loop(P, Q) ->
     receive
-	%% {'DOWN', _, _, _, _} ->
-	%%     ok;
+	{'DOWN', _, _, _, _} ->
+	    ok;
+	{Pid, stop} ->
+	    Pid ! {self(), ok};
 	{new_context, P1} ->
 	    reporter_loop(P1, queue:new());
 	{output, IO} ->
