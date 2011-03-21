@@ -6,7 +6,7 @@ main([Src, Target]) ->
     case file:read_file(Src) of
 	{ok, SrcBin} ->
 	    SrcStr = <<"href=\"">>,
-	    NewStr = list_to_binary("href=\"target/" ++ Branch ++ "/doc/"),
+	    NewStr = list_to_binary("href=\"blob/" ++ Branch ++ "/doc/"),
 	    TgtBin = binary:replace(SrcBin,
 				    SrcStr,
 				    NewStr, [global]
