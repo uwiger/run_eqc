@@ -97,7 +97,7 @@ OK, passed 100 tests
 
 
 <table width="100%" border="0" summary="list of modules">
-<tr><td><a href="doc/run_eqc.md" class="module">run_eqc</a></td></tr>
-<tr><td><a href="doc/run_eqc_app.md" class="module">run_eqc_app</a></td></tr>
-<tr><td><a href="doc/run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr></table>
+<tr><td><a href="target/master/doc/run_eqc.md" class="module">run_eqc</a></td></tr>
+<tr><td><a href="target/master/doc/run_eqc_app.md" class="module">run_eqc_app</a></td></tr>
+<tr><td><a href="target/master/doc/run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr></table>
 
