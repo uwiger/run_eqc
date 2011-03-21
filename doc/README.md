@@ -92,6 +92,35 @@ OK, passed 100 tests
 
 
 
+
+<h2>Running EQC Mini interactively</h2>
+
+
+
+
+
+You can load and run the EQC Mini code directly from the escript file,
+using the function `run_eqc:load(EscriptFile)`. This way, you can work
+interactively with EQC without having to install it separately.
+
+
+
+Example:
+
+
+<pre>
+Eshell V5.8.1  (abort with ^G)
+1> eqc:start().
+** exception error: undefined function eqc:start/0
+2> run_eqc:load("run_eqc.escript").
+ok
+3> eqc:start().
+Starting eqc mini version 1.0.1 (compiled at {{2010,6,13},{11,15,30}})
+<0.39.0>
+</pre>
+
+
+
 <h2 class="indextitle">Modules</h2>
 
 

@@ -18,7 +18,9 @@
 
 -module(run_eqc).
 -export([main/1]).
--export([generate/2]).
+-export([generate/2,
+	 load/1,
+	 i/1]).
 
 
 main(["generate", Out, EqcMini]) ->
@@ -98,7 +100,14 @@ args(["-rpt", Flag | T]) ->
 args([]) ->
     [].
 
-
+%% @spec generate(EscriptName, EqcMiniDir) -> ok
+%% @doc Creates the escript file, using a local installation of EQC Mini
+%%
+%% This function packages the EQC Mini application together with the `run_eqc'
+%% wrapper into one single escript file. `EqcMiniDir' should point to an 
+%% existing installation of EQC Mini.
+%% @end
+%%
 generate(Out, EqcMini) ->
     F = fun(F,Acc) ->
 		{ok,Bin} = file:read_file(F),
@@ -113,6 +122,43 @@ generate(Out, EqcMini) ->
     escript:create(
       Out, [shebang,
 	    {archive, [{filename:basename(This), Bin} | Acc1], []}]).
+
+%% @spec i(Escript) -> pid()
+%% @doc Load and run EQC Mini interactively from the Escript file
+%%
+%% This function is intended to be called from within an Erlang node.
+%% It loads EQC Mini {@link load/1}, and calls `eqc:start()'.
+%% @end
+%%
+i(Escript) ->
+    ok = load(Escript),
+    eqc:start().
+
+%% @spec load(Escript) -> ok
+%% @doc Loads the EQC Mini modules directly from the Escript file
+%%
+%% This function is intended to be called from within a running Erlang node.
+%% It loads the EQC Mini byte code directly from the escript file, and makes
+%% it possible to use EQC Mini interactively.
+%% @end
+%%
+load(Escript) ->
+    case escript:extract(Escript, []) of
+	{ok, PList} ->
+	    case zip:extract(proplists:get_value(archive, PList), [memory]) of
+		{ok, Files} ->
+		    lists:foreach(
+		      fun({Fname, Bin}) ->
+			      Module = list_to_atom(
+					 filename:basename(Fname, ".beam")),
+			      {module, _} = code:load_binary(Module, Fname, Bin)
+		      end, Files);
+		Err1 ->
+		    Err1
+	    end;
+	Err0 ->
+	    Err0
+    end.
     
 module(Opt, Rpt, Mod) ->
     case erlang:function_exported(eqc, module, 2) of
