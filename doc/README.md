@@ -19,6 +19,14 @@ additional support for output filtering.
 
 
 
+*Note:* The description and examples apply almost precisely also to the 
+`run_proper.escript` file, which wraps PropEr in the same way.
+PropEr is an EQC-compatible Open Source component designed by 
+Kostis Sagonas and Manolis Papadakis. You can fetch it at 
+[http://github.com/manopapad/proper.git](http://github.com/manopapad/proper.git)
+
+
+
 The file `run_eqc.escript` should be a runnable version of the wrapper,
 including `eqc-1.0.1` - the current version of EQC Mini. To build a new 
 version, ensure that you have EQC Mini installed, update the location of
@@ -129,5 +137,6 @@ Starting eqc mini version 1.0.1 (compiled at {{2010,6,13},{11,15,30}})
 <table width="100%" border="0" summary="list of modules">
 <tr><td><a href="run_eqc.md" class="module">run_eqc</a></td></tr>
 <tr><td><a href="run_eqc_app.md" class="module">run_eqc_app</a></td></tr>
-<tr><td><a href="run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr></table>
+<tr><td><a href="run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr>
+<tr><td><a href="run_proper.md" class="module">run_proper</a></td></tr></table>
 

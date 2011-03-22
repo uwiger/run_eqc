@@ -24,6 +24,12 @@ Run_eqc packages QuickCheck Mini as a single escript file and provides
 a command-line interface for running QuickCheck tests. with some 
 additional support for output filtering.
 
+*Note:* The description and examples apply almost precisely also to the 
+`run_proper.escript' file, which wraps PropEr in the same way.
+PropEr is an EQC-compatible Open Source component designed by 
+Kostis Sagonas and Manolis Papadakis. You can fetch it at 
+<a href="http://github.com/manopapad/proper.git">http://github.com/manopapad/proper.git</a>
+
 The file `run_eqc.escript' should be a runnable version of the wrapper,
 including `eqc-1.0.1' - the current version of EQC Mini. To build a new 
 version, ensure that you have EQC Mini installed, update the location of
