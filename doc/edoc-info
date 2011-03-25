@@ -1,3 +1,3 @@
 {application,run_eqc}.
 {packages,[]}.
-{modules,[run_eqc,run_eqc_app,run_eqc_sup]}.
+{modules,[run_eqc,run_eqc_app,run_eqc_sup,run_proper]}.
