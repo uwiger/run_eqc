@@ -6,11 +6,13 @@ PROP=${HOME}/git/proper
 
 BRANCH=`git branch | awk '/\*/ {print $2}'`
 
-all: compile
+all: get_deps compile
 
 compile:
 	./rebar compile
 
+get_deps:
+	./rebar get-deps
 
 clean:
 	./rebar clean
