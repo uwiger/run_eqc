@@ -1,15 +1,14 @@
-Module run_proper
-=================
+Module run_eqc_gen
+==================
 
 
-<h1>Module run_proper</h1>
+<h1>Module run_eqc_gen</h1>
 
-* [Description](#description)
 * [Function Index](#index)
 * [Function Details](#functions)
 
 
-escript wrapper for Quviq QuickCheck.
+
 
 
 
@@ -33,5 +32,5 @@ escript wrapper for Quviq QuickCheck.
 
 
 
-`main(S) -> any()`
+`main(X1) -> any()`
 

@@ -18,13 +18,7 @@
 
 -module(run_proper).
 -export([main/1]).
--export([generate/2,
-	 load/1,
-	 i/1]).
 
-
-main(["generate", Out, Proper]) ->
-    generate(Out, Proper);
 main(S) ->
     Args = try args(S)
 	   catch
@@ -100,66 +94,6 @@ args(["-rpt", Flag | T]) ->
 args([]) ->
     [].
 
-%% @spec generate(EscriptName, ProperDir) -> ok
-%% @doc Creates the escript file, using a local installation of Proper
-%%
-%% This function packages the Proper application together with the `run_proper'
-%% wrapper into one single escript file. `ProperDir' should point to an 
-%% existing installation of Proper.
-%% @end
-%%
-generate(Out, EqcMini) ->
-    F = fun(F,Acc) ->
-		{ok,Bin} = file:read_file(F),
-		[{filename:basename(F),Bin}|Acc]
-	end,
-    Acc1 = filelib:fold_files(
-	     EqcMini ++ "/ebin",
-	     ".*\\.beam",
-	     false, F, []),
-    This = code:which(?MODULE),
-    {ok, Bin} = file:read_file(code:which(?MODULE)),
-    escript:create(
-      Out, [shebang,
-	    {archive, [{filename:basename(This), Bin} | Acc1], []}]).
-
-%% @spec i(Escript) -> pid()
-%% @doc Load and run PropEr interactively from the Escript file
-%%
-%% This function is intended to be called from within an Erlang node.
-%% It loads PropEr {@link load/1}, and calls `proper:start()'.
-%% @end
-%%
-i(Escript) ->
-    ok = load(Escript),
-    proper:start().
-
-%% @spec load(Escript) -> ok
-%% @doc Loads the PropEr modules directly from the Escript file
-%%
-%% This function is intended to be called from within a running Erlang node.
-%% It loads the PropEr byte code directly from the escript file, and makes
-%% it possible to use PropEr interactively.
-%% @end
-%%
-load(Escript) ->
-    case escript:extract(Escript, []) of
-	{ok, PList} ->
-	    case zip:extract(proplists:get_value(archive, PList), [memory]) of
-		{ok, Files} ->
-		    lists:foreach(
-		      fun({Fname, Bin}) ->
-			      Module = list_to_atom(
-					 filename:basename(Fname, ".beam")),
-			      {module, _} = code:load_binary(Module, Fname, Bin)
-		      end, Files);
-		Err1 ->
-		    Err1
-	    end;
-	Err0 ->
-	    Err0
-    end.
-    
 module(Opt, Rpt, Mod) ->
     case erlang:function_exported(proper, module, 2) of
 	true ->

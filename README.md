@@ -7,7 +7,7 @@ run_eqc - An escript wrapper for Quviq QuickCheck
 ==================================================
 .
 
-Copyright © 2010 Erlang Solutions Ltd.
+Copyright (c) 2010 Erlang Solutions Ltd.
 
 __Version:__ 0.1
 
@@ -20,21 +20,21 @@ additional support for output filtering.
 
 
 *Note:* The description and examples apply almost precisely also to the 
-`run_proper.escript` file, which wraps PropEr in the same way.
+`run_proper.ez` file, which wraps PropEr in the same way.
 PropEr is an EQC-compatible Open Source component designed by 
 Kostis Sagonas and Manolis Papadakis. You can fetch it at 
 [http://github.com/manopapad/proper.git](http://github.com/manopapad/proper.git)
 
 
 
-The file `run_eqc.escript` should be a runnable version of the wrapper,
+The file `run_eqc.ez` should be a runnable version of the wrapper,
 including `eqc-1.0.1` - the current version of EQC Mini. To build a new 
 version, ensure that you have EQC Mini installed, update the location of
 it in the Makefile, and call `make script`.
 
 
 <pre>
-Usage: run_eqc.escript [ Option ]
+Usage: escript run_eqc.ez [ Option ]
 -n NumTests    run NumTests number of tests (default 100)
 -m Module      run eqc:module([ Option, ] Module)
 -pa Dir        prepend Dir to the code path
@@ -57,27 +57,27 @@ Example:
 
 
 
-Using the (broken) property in [run_eqc_test.erl](run_eqc/blob/master/test/run_eqc_test.erl), we can illustrate the use of num_tests (the error is unlikely to appear with only 100 tests), and `-rpt error`. We also note that `run_eqc.escript` signals test case failure appropriately to the make script.
+Using the (broken) property in [run_eqc_test.erl](http://github.com/esl/run_eqc/blob/master/../test/run_eqc_test.erl), we can illustrate the use of num_tests (the error is unlikely to appear with only 100 tests), and `-rpt error`. We also note that `run_eqc.escript` signals test case failure appropriately to the make script.
 
 
 <pre>
-uwbook:run_eqc uwiger$ make test
+$ make test
 ./rebar compile
 ==> edown (compile)
 ==> run_eqc (compile)
-escript ebin/run_eqc.beam generate run_eqc.escript /Users/uwiger/lib/eqc-1.0.1
-chmod u+x run_eqc.escript
+escript ebin/run_eqc_gen.beam run_eqc.ez /Users/uwiger/lib/eqc-1.0.1/ebin eqc
+escript ebin/run_eqc_gen.beam run_proper.ez /Users/uwiger/git/proper/ebin proper
 erlc -W -o test test/run_eqc_test.erl
-./run_eqc.escript -m run_eqc_test -n 1000 -rpt error -pa test
+escript ./run_eqc.ez -m run_eqc_test -n 1000 -rpt error -pa test
 Starting eqc mini version 1.0.1 (compiled at {{2010,6,13},{11,15,30}})
 FAILED property prop_lists_delete:
-....................................................................................................................................................................................................................................................Failed! After 245 tests.
-{-12,[19,-25,24,-12,13,22,18,-12,-2]}
-Shrinking.....(5 times)
-{-12,[-12,-12]}
+...........................................................................................................................................................................................................................................................................................Failed! After 284 tests.
+{-41,[5,-30,35,-2,23,-37,26,-7,-41,-2,-41,-13,41,-19,-17]}
+Shrinking....(4 times)
+{-41,[-41,-41]}
 Failed properties in run_eqc_test:
 [prop_lists_delete]
-make: *** [test] Error 1
+make: *** [test_eqc] Error 1
 </pre>
 
 
@@ -87,7 +87,7 @@ If we test the same module using default values:
 
 
 <pre>
-uwbook:run_eqc uwiger$ ./run_eqc.escript -m run_eqc_test -pa test/
+$ escript ./run_eqc.ez -m run_eqc_test -pa test
 Starting eqc mini version 1.0.1 (compiled at {{2010,6,13},{11,15,30}})
 ....................................................................................................
 OK, passed 100 tests
@@ -108,9 +108,7 @@ OK, passed 100 tests
 
 
 You can load and run the EQC Mini code directly from the escript file,
-using the function `run_eqc:load(EscriptFile)`. This way, you can work
-interactively with EQC without having to install it separately.
-Using the function `run_eqc:i(EscriptFile)` will both load and start eqc.
+using OTP's ability to load code from a zip archive.
 
 
 
@@ -118,14 +116,13 @@ Example:
 
 
 <pre>
-Eshell V5.8.1  (abort with ^G)
+$ erl -pa run_eqc.ez/eqc/ebin
+Erlang R14B02 (erts-5.8.3) [source] [smp:4:4] [rq:4] [async-threads:0] [hipe] [kernel-poll:false]
+
+Eshell V5.8.3  (abort with ^G)
 1> eqc:start().
-** exception error: undefined function eqc:start/0
-2> run_eqc:load("run_eqc.escript").
-ok
-3> eqc:start().
 Starting eqc mini version 1.0.1 (compiled at {{2010,6,13},{11,15,30}})
-<0.39.0>
+<0.35.0>
 </pre>
 
 
@@ -135,8 +132,9 @@ Starting eqc mini version 1.0.1 (compiled at {{2010,6,13},{11,15,30}})
 
 
 <table width="100%" border="0" summary="list of modules">
-<tr><td><a href="run_eqc/blob/master/doc/run_eqc.md" class="module">run_eqc</a></td></tr>
-<tr><td><a href="run_eqc/blob/master/doc/run_eqc_app.md" class="module">run_eqc_app</a></td></tr>
-<tr><td><a href="run_eqc/blob/master/doc/run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr>
-<tr><td><a href="run_eqc/blob/master/doc/run_proper.md" class="module">run_proper</a></td></tr></table>
+<tr><td><a href="http://github.com/esl/run_eqc/blob/master/doc/run_eqc.md" class="module">run_eqc</a></td></tr>
+<tr><td><a href="http://github.com/esl/run_eqc/blob/master/doc/run_eqc_app.md" class="module">run_eqc_app</a></td></tr>
+<tr><td><a href="http://github.com/esl/run_eqc/blob/master/doc/run_eqc_gen.md" class="module">run_eqc_gen</a></td></tr>
+<tr><td><a href="http://github.com/esl/run_eqc/blob/master/doc/run_eqc_sup.md" class="module">run_eqc_sup</a></td></tr>
+<tr><td><a href="http://github.com/esl/run_eqc/blob/master/doc/run_proper.md" class="module">run_proper</a></td></tr></table>
 

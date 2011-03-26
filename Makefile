@@ -27,19 +27,25 @@ test/run_proper_test.beam: test/run_proper_test.erl
 	erlc -W -o test test/run_proper_test.erl
 
 test_eqc: script test/run_eqc_test.beam
-	./run_eqc.escript -m run_eqc_test -n 1000 -rpt error -pa test
+	escript ./run_eqc.ez -m run_eqc_test -n 1000 -rpt error -pa test
 
 test_proper: script test/run_proper_test.beam
-	./run_proper.escript -m run_proper_test -n 1000 -rpt error -pa test
+	escript ./run_proper.ez -m run_proper_test -n 1000 \
+	-rpt error -pa test
 
 test: test_eqc test_proper
 
 doc:
 	./rebar doc
-	./mk_readme.escript doc/README.md README.md
 
-script: compile
-	escript ebin/run_eqc.beam generate run_eqc.escript ${EQC}
-	chmod u+x run_eqc.escript
-	escript ebin/run_proper.beam generate run_proper.escript ${PROP}
-	chmod u+x run_proper.escript
+run_eqc.ez:
+	escript ebin/run_eqc_gen.beam run_eqc.ez ${EQC}/ebin eqc
+
+run_proper.ez:
+	escript ebin/run_eqc_gen.beam run_proper.ez ${PROP}/ebin proper
+
+script: run_eqc.ez run_proper.ez
+#	escript ebin/run_eqc.beam generate run_eqc.escript ${EQC}
+#	chmod u+x run_eqc.escript
+#	escript ebin/run_proper.beam generate run_proper.escript ${PROP}
+#	chmod u+x run_proper.escript
