@@ -4,14 +4,10 @@
 
 main([Archive, QC, Which]) when Which=="proper"; Which=="eqc" ->
     QCPath = Which ++ "/" ++ "ebin" ++ "/",
+    QCIncl = Which ++ "/" ++ "include" ++ "/",
     QCFiles = 
-	filelib:fold_files(
-	  QC, "\\.beam\$", false, 
-	  fun(F, Acc) ->
-		  {ok, Bin} = file:read_file(F),
-		  FN = QCPath ++ filename:basename(F),
-		  [{FN, Bin}|Acc]
-	  end, []),
+	fold_files(join(QC,"include"), QCIncl) ++
+	fold_files(join(QC,"ebin"), QCPath),
     MyPath = filename:dirname(code:which(?MODULE)),
     MainMod = case Which of
 		  "eqc" ->
@@ -23,3 +19,18 @@ main([Archive, QC, Which]) when Which=="proper"; Which=="eqc" ->
     ZipName = "run_eqc/ebin/" ++ filename:basename(MainMod),
     zip:create(Archive, [{ZipName, Bin}
 			 | QCFiles]).
+
+file_bin(F) ->
+    {ok, B} = file:read_file(F),
+    B.
+
+fold_files(D, Path) ->
+    filelib:fold_files(
+      D, ".*", false, 
+      fun(F, Acc) ->
+	      FN = Path ++ filename:basename(F),
+	      [{FN, file_bin(F)}|Acc]
+      end, []).
+
+join(A, B) ->
+    filename:join(A, B).
